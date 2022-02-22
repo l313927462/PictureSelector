@@ -108,7 +108,7 @@ class PhotoListController: UIViewController, UICollectionViewDataSource, UIColle
     
     // MARK: -KVO
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        print("change![.newKey]   ====== \(change![.newKey] )")
+//        print("change![.newKey]   ====== \(change![.newKey] )")
         if keyPath == observerKey_icloudDownloading {
             DispatchQueue.main.async {
                 if change![.newKey] as? Bool == true {

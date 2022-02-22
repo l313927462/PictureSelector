@@ -87,7 +87,7 @@ class PhotoManager: NSObject {
                 
                 DispatchQueue.global().async {
                     if let asset = model.asset {
-                        print("model.locallyAvailable     ====\(model.locallyAvailable)")
+//                        print("model.locallyAvailable     ====\(model.locallyAvailable)")
                         if model.locallyAvailable == false {
                             self.isIcloudLoading = true
                         }
@@ -130,7 +130,6 @@ class PhotoManager: NSObject {
     
    //MARK: -libraryChanged
     func libraryChanged(_ changeInstance: PHChange) {
-        let newResult = PHAsset.fetchAssets(with: fetchAllOption)
         guard let changeDetails = changeInstance.changeDetails(for: fetchResult)else {
             return
         }
@@ -164,7 +163,6 @@ class PhotoManager: NSObject {
                         continue
                     }
                     dataSource[index] = newDatasource[index]
-                    print(dataSource[index])
                     rows.append(IndexPath.init(row: index, section: 0))
                 }
             }

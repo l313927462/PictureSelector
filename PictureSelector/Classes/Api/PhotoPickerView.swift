@@ -121,8 +121,6 @@ extension PhotoPickerView {
             var selectArray = addedPhotos
             selectArray.removeLast()
             controller.completeBlock = { photos in
-
-                print(photos.count)
                 let lastModel = self.addedPhotos.last
                 self.addedPhotos = photos
                 self.addedPhotos.append(lastModel!)
@@ -134,7 +132,6 @@ extension PhotoPickerView {
                 var array = addedPhotos
                 array.removeLast()
                 controller.lastAddedArray = array
-                print(array.count)
                 vc.present(navController, animated: true, completion: nil)
             } else {
                 print("current controller is nil ... ")
