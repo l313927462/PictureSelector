@@ -8,48 +8,38 @@
 import SnapKit
 import UIKit
 
-public struct PhotoPickerConfiguration {
-    var columnCount: Int64 = 4
-    var itemSpace:CGFloat = 2
-    var maxSelectImageCount = 4
-    var maxSelectViodeoCount = 0
-    
-    /// 单个照片大小限制 （单位：MB）
-    var photoDataMaxSize = 5
-    /// 单个视频大小限制 （单位：MB）
-    var videoDataMaxSize = 100
-    
-    var itemWidth:CGFloat {
-        get {
-            return (CGFloat(UIScreen.main.bounds.size.width) - itemSpace * CGFloat((columnCount - 1))) / CGFloat( Float(columnCount))
-        }
-    }
-}
+
 
 
 
 
 public class PhotoPickerView: UIView, UICollectionViewDataSource, UICollectionViewDelegate {
-    
-    
-    var pickerConfig = PhotoPickerConfiguration()
-    
-    
+    var config = SelectorConfiguration()
     override init(frame: CGRect) {
         super.init(frame: frame)
-
     }
     
     
-    public convenience init(_ frame:CGRect, _ config: PhotoPickerConfiguration?) {
+    public convenience init(_ frame:CGRect, itemSize: CGSize, itemSpace: CGFloat = 1, selectorConfig: SelectorConfiguration? = nil) {
        
         self.init(frame: frame)
-        if let customConfig = config {
-            pickerConfig = customConfig
+        if let customConfig = selectorConfig {
+            config = customConfig
         }
+        
+        
+        let layout = UICollectionViewFlowLayout()
+        layout.itemSize = itemSize
+        layout.minimumLineSpacing = itemSpace
+        layout.minimumInteritemSpacing = itemSpace
+        collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.showsVerticalScrollIndicator = false
+        collectionView.backgroundColor = .clear
+        collectionView.register(AddedCell.self, forCellWithReuseIdentifier: AddedCell.reuseID())
+        
+        addSubview(self.collectionView)
         collectionView.delegate = self
         collectionView.dataSource = self
-        addSubview(collectionView)
         collectionView.snp.remakeConstraints { make in
             make.edges.equalToSuperview()
         }
@@ -63,17 +53,7 @@ public class PhotoPickerView: UIView, UICollectionViewDataSource, UICollectionVi
     
     
       
-    lazy var collectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.itemSize = CGSize(width: pickerConfig.itemWidth, height: pickerConfig.itemWidth)
-        layout.minimumLineSpacing = pickerConfig.itemSpace
-        layout.minimumInteritemSpacing = pickerConfig.itemSpace
-        let collectView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectView.showsVerticalScrollIndicator = true
-        collectView.backgroundColor = .clear
-        collectView.register(AddedCell.self, forCellWithReuseIdentifier: AddedCell.reuseID())
-        return collectView
-    }()
+    var collectionView: UICollectionView!
     
 //    public var clickAdd: (() -> Void)?
     
@@ -84,7 +64,6 @@ public class PhotoPickerView: UIView, UICollectionViewDataSource, UICollectionVi
     public var addedPhotos: [PhotoModel] = [PhotoModel()]
     
    
-    
 
 }
 
@@ -93,9 +72,9 @@ public class PhotoPickerView: UIView, UICollectionViewDataSource, UICollectionVi
 extension PhotoPickerView {
     
     public func collectionView(_: UICollectionView, numberOfItemsInSection _: Int) -> Int {
-        return addedPhotos.count >= 4 ? 4 : addedPhotos.count
+        return Int((addedPhotos.count >= config.maxSelectCount) ?  Int(config.maxSelectCount) : addedPhotos.count)
     }
-    
+        
     
 
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -103,7 +82,7 @@ extension PhotoPickerView {
         cell.model = addedPhotos[indexPath.row]
         cell.backgroundColor = .yellow
         cell.deleteBlock = { mod in
-            self.addedPhotos.remove(at: self.addedPhotos.index(of: mod)!)
+            self.addedPhotos.remove(at: self.addedPhotos.firstIndex(of: mod)!)
             self.refreshData()
         }
         return cell
@@ -114,7 +93,7 @@ extension PhotoPickerView {
             
         } else {
             print("jump ----")
-            let controller = PhotoListController()
+            let controller = PhotoListController.init(config)
             let navController = UINavigationController(rootViewController: controller)
             controller.modalPresentationStyle = .fullScreen
 

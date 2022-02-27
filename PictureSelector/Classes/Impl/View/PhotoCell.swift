@@ -9,8 +9,8 @@ import Photos
 import SnapKit
 import UIKit
 
-private let selectButtonMargin = 3
-private let selectButtonWidth = 25
+private let selectButtonMargin = 2
+private let selectButtonWidth = 35
 
 private let observerKey_isSelected = "isSelected"
 private let observerKey_thumImage = "thumImage"
@@ -52,6 +52,7 @@ class PhotoCell: UICollectionViewCell {
         timeLabel.font = UIFont.systemFont(ofSize: 13)
         
         selectButton.setImage(Util.image("btn-check-normal"), for: .normal)
+        selectButton.imageEdgeInsets = UIEdgeInsets.init(top: 5, left: 5, bottom: 5, right: 5)
         selectButton.addTarget(self, action: #selector(selectAction), for: .touchUpInside)
         
         imageView.contentMode = .scaleAspectFill

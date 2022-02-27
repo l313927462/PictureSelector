@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'PictureSelector'
-  s.version          = '0.0.1'
+  s.version          = '0.0.2'
   s.summary          = 'A short description of PictureSelector.'
 
 # This description is used to generate tags and improve search results.
@@ -28,7 +28,7 @@ TODO: Add long description of the pod here.
   s.source           = { :git => 'git@github.com:l313927462/PictureSelector.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
-  s.ios.deployment_target = '13.0'
+  s.ios.deployment_target = '10.0'
   s.swift_version = '5.0'
 
   s.source_files = 'PictureSelector/Classes/**/*'

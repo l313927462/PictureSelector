@@ -12,7 +12,7 @@ import SnapKit
 import PictureSelector
 
 class ViewController: UIViewController {
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -32,11 +32,11 @@ class ViewController: UIViewController {
         } else {
             print("有权限")
         }
-
+        
         if #available(iOS 14, *) {
             // 查询权限
             let level = PHAccessLevel.readWrite
-
+            
             let status = PHPhotoLibrary.authorizationStatus(for: level)
             switch status {
             case .limited:
@@ -50,7 +50,7 @@ class ViewController: UIViewController {
             }
         }
         
-        let photoView = PhotoPickerView.init(CGRect.zero, nil)
+        let photoView = PhotoPickerView.init(.zero, itemSize: CGSize.init(width: 80, height: 80))
         view.addSubview(photoView)
         photoView.snp.makeConstraints { make in
             make.leading.equalToSuperview()
@@ -63,14 +63,14 @@ class ViewController: UIViewController {
     // 判断是否授权
     func isAuthorized() -> Bool {
         return PHPhotoLibrary.authorizationStatus() == .authorized ||
-            PHPhotoLibrary.authorizationStatus() == .notDetermined
+        PHPhotoLibrary.authorizationStatus() == .notDetermined
     }
-
-
+    
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
+    
 }
 

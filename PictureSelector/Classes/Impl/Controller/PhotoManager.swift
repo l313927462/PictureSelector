@@ -8,12 +8,16 @@
 import UIKit
 import Photos
 import PhotosUI
+import SVProgressHUD
 
 class PhotoManager: NSObject {
+    
+    public var config = SelectorConfiguration()
     /// 资源库所有的图片 、视频
     public var dataSource = [PhotoModel]()
     weak var delegate: DatasourceChangeDelegate?
-    public var selectedArray = [PhotoModel]()
+    /// 已选中的图片、视频
+    @objc dynamic public var selectedArray = [PhotoModel]()
     @objc dynamic var isIcloudLoading = false
     private var fetchResult = PHFetchResult<PHAsset>()
     
@@ -33,6 +37,17 @@ class PhotoManager: NSObject {
         dataSource = creatDatasource(fetchResult)
         delegate?.reloadAll()
     }
+    
+    
+    public func isAvailableFormat(_ model: PhotoModel) -> Bool {
+        for item in config.availableFormats {
+            if item.caseInsensitiveCompare(model.name) == .orderedSame {
+                return true
+            }
+        }
+        return false
+    }
+    
     
     func creatDatasource(_ fetchResult: PHFetchResult<PHAsset>) ->[PhotoModel] {
         var addedIdentifierDictionary = [String: Int]()
@@ -76,6 +91,19 @@ class PhotoManager: NSObject {
 
     
     func downloadFormIcloud(_ model: PhotoModel) {
+        
+        if selectedArray.count >= config.maxSelectCount {
+            SVProgressHUD.showInfo(withStatus: "最多只能选择\(config.maxSelectCount)张")
+            return
+        }
+        
+        
+        if isAvailableFormat(model){
+            SVProgressHUD.showInfo(withStatus: "不支持的格式")
+            return
+        }
+        
+        
         if dataSource.contains(model) {
             if model.isSelected  == true {
                 model.isSelected = false

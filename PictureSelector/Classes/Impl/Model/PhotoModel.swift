@@ -67,15 +67,5 @@ public class PhotoModel: NSObject {
             self.thumImage = image
         })
     }
-    
-    public func isSupportedForat() -> Bool {
-        let upperName = name.uppercased()
-        let formats = ["PNG", "JPG", "JPEG", "MOV", "MP4", "WAVI"]
-        for item in formats {
-            if upperName.hasSuffix(item) {
-                return true
-            }
-        }
-        return false
-    }
+   
 }

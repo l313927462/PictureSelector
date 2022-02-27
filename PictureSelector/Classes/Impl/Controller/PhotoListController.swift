@@ -14,6 +14,7 @@ import SVProgressHUD
 private var lineCount: CGFloat = 4
 private var lineSpace: CGFloat = 2
 fileprivate let observerKey_icloudDownloading = "isIcloudLoading"
+fileprivate let observerKey_addedPhoto = "selectedArray"
 
 
 
@@ -21,8 +22,12 @@ private var itemWidth: CGFloat = (CGFloat(UIScreen.main.bounds.size.width) - lin
 
 class PhotoListController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate ,PHPhotoLibraryChangeObserver, DatasourceChangeDelegate{
     
+    convenience init(_ config: SelectorConfiguration) {
+        self.init()
+        self.photoManager.config = config
+    }
     /// 获取媒体库视频、照片资源
-    let photoManager = PhotoManager()
+    private let photoManager = PhotoManager()
     /// 上一次添加的数据，再添加时传入
     public var lastAddedArray = [PhotoModel]()
     /// 点击 完成 闭包
@@ -52,22 +57,27 @@ class PhotoListController: UIViewController, UICollectionViewDataSource, UIColle
     
     public override func viewDidLoad() {
         super.viewDidLoad()
-        
-        SVProgressHUD.setDefaultStyle(.dark)
-        SVProgressHUD.setForegroundColor(.gray)
-        SVProgressHUD.setDefaultAnimationType(.native)
-        SVProgressHUD.setBackgroundColor(.groupTableViewBackground)
-        
+        configHUD()
         resetCachedAssets()
         configUI()
         registerPHPhotoLibrary()
         photoManager.delegate = self
         photoManager.selectedArray = lastAddedArray
         photoManager.fetchAllPhotos()
+        
+        refreshTitleView()
+        photoManager.addObserver(self, forKeyPath: observerKey_addedPhoto, options: .new, context: nil)
         photoManager.addObserver(self, forKeyPath: observerKey_icloudDownloading, options: .new, context: nil)
     }
-
-
+    
+    
+    func configHUD(){
+        SVProgressHUD.setDefaultStyle(.dark)
+        SVProgressHUD.setForegroundColor(.gray)
+        SVProgressHUD.setMinimumDismissTimeInterval(2)
+        SVProgressHUD.setDefaultAnimationType(.native)
+        SVProgressHUD.setBackgroundColor(.groupTableViewBackground)
+    }
     
     func registerPHPhotoLibrary() {
         PHPhotoLibrary.shared().register(self)
@@ -78,11 +88,14 @@ class PhotoListController: UIViewController, UICollectionViewDataSource, UIColle
     
     
     deinit {
+        
+        photoManager.removeObserver(self, forKeyPath: observerKey_addedPhoto)
         photoManager.removeObserver(self, forKeyPath: observerKey_icloudDownloading)
         PHPhotoLibrary.shared().unregisterChangeObserver(self)
     }
     
     func configUI(){
+        navigationItem.leftBarButtonItem = UIBarButtonItem.init(image: Util.image("ps_back"), style: .plain, target: self, action: #selector(backAction))
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(completeAction))
         view.addSubview(collectView)
         view.backgroundColor = .groupTableViewBackground
@@ -100,16 +113,32 @@ class PhotoListController: UIViewController, UICollectionViewDataSource, UIColle
     }
     
     
+    func refreshTitleView(){
+        self.title = "已选中(" + String.init(photoManager.selectedArray.count) + ")"
+    }
+    
+    
     // MARK: -完成
     @objc func completeAction() {
         completeBlock!(self.photoManager.selectedArray)
         dismiss(animated: true, completion: nil)
     }
     
+    @objc func backAction(){
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    
+    
     // MARK: -KVO
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-//        print("change![.newKey]   ====== \(change![.newKey] )")
-        if keyPath == observerKey_icloudDownloading {
+        //        print("change![.newKey]   ====== \(change![.newKey] )")
+        
+        
+        switch keyPath {
+        case observerKey_addedPhoto:
+            refreshTitleView()
+        case observerKey_icloudDownloading:
             DispatchQueue.main.async {
                 if change![.newKey] as? Bool == true {
                     SVProgressHUD.show(withStatus: "iCloud loading... ")
@@ -118,6 +147,7 @@ class PhotoListController: UIViewController, UICollectionViewDataSource, UIColle
                 }
             }
             
+        default : break
         }
     }
 }
@@ -159,12 +189,12 @@ extension PhotoListController {
             self.collectView.reloadData()
         }
     }
- 
+    
     
     func reload(_ rows: [IndexPath]) {
         DispatchQueue.main.async {
             self.collectView.reloadItems(at: rows)
         }
     }
- 
+    
 }
