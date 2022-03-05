@@ -14,7 +14,6 @@ Add a item for the Info.plist
 ```swift
 <key>PHPhotoLibraryPreventAutomaticLimitedAccessAlert</key>
 	<true/>
-</plist>
 ```
 
 ## Installation
