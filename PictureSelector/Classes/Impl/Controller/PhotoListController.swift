@@ -58,21 +58,23 @@ class PhotoListController: UIViewController, UICollectionViewDataSource, UIColle
     public override func viewDidLoad() {
         super.viewDidLoad()
         configHUD()
-        resetCachedAssets()
         configUI()
         registerPHPhotoLibrary()
+        configPhotoManager()
+        refreshTitleView()
+    }
+    func configPhotoManager(){
+        resetCachedAssets()
         photoManager.delegate = self
         photoManager.selectedArray = lastAddedArray
         photoManager.fetchAllPhotos()
-        
-        refreshTitleView()
         photoManager.addObserver(self, forKeyPath: observerKey_addedPhoto, options: .new, context: nil)
         photoManager.addObserver(self, forKeyPath: observerKey_icloudDownloading, options: .new, context: nil)
     }
     
-    
     func configHUD(){
         SVProgressHUD.setDefaultStyle(.dark)
+        SVProgressHUD.setDefaultMaskType(.clear)
         SVProgressHUD.setForegroundColor(.gray)
         SVProgressHUD.setMinimumDismissTimeInterval(2)
         SVProgressHUD.setDefaultAnimationType(.native)
@@ -88,7 +90,6 @@ class PhotoListController: UIViewController, UICollectionViewDataSource, UIColle
     
     
     deinit {
-        
         photoManager.removeObserver(self, forKeyPath: observerKey_addedPhoto)
         photoManager.removeObserver(self, forKeyPath: observerKey_icloudDownloading)
         PHPhotoLibrary.shared().unregisterChangeObserver(self)
@@ -114,7 +115,9 @@ class PhotoListController: UIViewController, UICollectionViewDataSource, UIColle
     
     
     func refreshTitleView(){
-        self.title = "已选中(" + String.init(photoManager.selectedArray.count) + ")"
+        DispatchQueue.main.async { [self] in
+            self.title = "已选择(" + String.init(self.photoManager.selectedArray.count) + ")"
+        }
     }
     
     

@@ -14,7 +14,7 @@ extension UIImage {
     }
     
     static func mybundle() -> Bundle? {
-        let bundle = Bundle(for: PhotoPickerView.self)
+        let bundle = Bundle(for: PhotoListController.self)
         let path = bundle.path(forResource: "PictureSelector", ofType: "bundle")
         return Bundle(path: path ?? "")
     }
@@ -27,7 +27,7 @@ class Util {
     }
     
     static func mybundle() -> Bundle? {
-        let bundle = Bundle(for: PhotoPickerView.self)
+        let bundle = Bundle(for: PhotoListController.self)
         let path = bundle.path(forResource: "PictureSelector", ofType: "bundle")
         return Bundle(path: path ?? "")
     }

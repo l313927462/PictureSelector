@@ -15,6 +15,8 @@
 		607FACEC1AFB9204008FA782 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* Tests.swift */; };
 		9FF785962E8CE027F63272AB /* Pods_PictureSelector_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D20E2913889586C44B1967D /* Pods_PictureSelector_Tests.framework */; };
 		A67F944EDC0651C6670CF594 /* Pods_PictureSelector_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ABDB20135CAFCC05E8EDFACE /* Pods_PictureSelector_Example.framework */; };
+		F92447DA27D32AE00075E596 /* SelectedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F92447D927D32ADF0075E596 /* SelectedCell.swift */; };
+		F9405A1827D272CB00DDF35F /* PhotoPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9405A1727D272CA00DDF35F /* PhotoPickerView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +49,8 @@
 		65B8F51D8B38F726D54CFAC1 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		ABDB20135CAFCC05E8EDFACE /* Pods_PictureSelector_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PictureSelector_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EAC5B67321C21E198938DB5C /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
+		F92447D927D32ADF0075E596 /* SelectedCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedCell.swift; sourceTree = "<group>"; };
+		F9405A1727D272CA00DDF35F /* PhotoPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPickerView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +110,8 @@
 			children = (
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
 				607FACD71AFB9204008FA782 /* ViewController.swift */,
+				F9405A1727D272CA00DDF35F /* PhotoPickerView.swift */,
+				F92447D927D32ADF0075E596 /* SelectedCell.swift */,
 				607FACD91AFB9204008FA782 /* Main.storyboard */,
 				607FACDC1AFB9204008FA782 /* Images.xcassets */,
 				607FACDE1AFB9204008FA782 /* LaunchScreen.xib */,
@@ -338,6 +344,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
+				F9405A1827D272CB00DDF35F /* PhotoPickerView.swift in Sources */,
+				F92447DA27D32AE00075E596 /* SelectedCell.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

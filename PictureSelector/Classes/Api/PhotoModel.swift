@@ -29,15 +29,15 @@ public class PhotoModel: NSObject {
             return false
         }
     }
-    var mediaType: PHAssetMediaType? {
+    public var mediaType: PHAssetMediaType? {
         return asset?.mediaType
     }
     var identifier: String? {
         return asset?.localIdentifier
     }
     
-    var duration: String = ""
-    @objc dynamic var thumImage: UIImage?
+    public var duration: String = ""
+    @objc dynamic public var thumImage: UIImage?
 
     var previewImage: UIImage? {
         return UIImage.init(data: self.data)
@@ -45,7 +45,7 @@ public class PhotoModel: NSObject {
     /// 用于视频预览
     var playItem: AVPlayerItem?
     /// 视频 or 图片的真实数据
-    var data = Data()
+    public var data = Data()
     /// 视频 or 图片数据的 大小，单位MB
     var sizeOfMb:CGFloat {
         get {

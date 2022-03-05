@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import PictureSelector
 private let selectButtonMargin = 3
 private let selectButtonWidth = 25
 class AddedCell: UICollectionViewCell {
@@ -15,10 +16,19 @@ class AddedCell: UICollectionViewCell {
     var imageView = UIImageView()
     var model: PhotoModel? {
         didSet {
+
+            guard  model != nil  else {
+                timeLabel.isHidden = true
+                selectButton.isHidden = true
+                imageView.image =  UIImage.init(named:"add_icon")
+                return
+            }
+            
             timeLabel.isHidden = !(model?.mediaType == .video)
             timeLabel.text = model?.duration
-            selectButton.isHidden = (model?.asset == nil)
-             imageView.image = (model?.asset == nil) ? Util.image("add_icon") : model?.thumImage
+            selectButton.isHidden = false
+            imageView.image =  model?.thumImage
+            
         }
     }
 
@@ -33,7 +43,7 @@ class AddedCell: UICollectionViewCell {
         timeLabel.textColor = .white
         timeLabel.font = UIFont.systemFont(ofSize: 13)
 
-        selectButton.setImage(Util.image("compose_photo_close"), for: .normal)
+        selectButton.setImage( UIImage.init(named:"compose_photo_close"), for: .normal)
         selectButton.imageView?.contentMode = .scaleToFill
         selectButton.addTarget(self, action: #selector(deletAction), for: .touchUpInside)
 

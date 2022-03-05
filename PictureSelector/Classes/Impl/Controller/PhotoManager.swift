@@ -91,18 +91,15 @@ class PhotoManager: NSObject {
 
     
     func downloadFormIcloud(_ model: PhotoModel) {
-        
-        if selectedArray.count >= config.maxSelectCount {
+        if selectedArray.count >= config.maxSelectCount, model.isSelected == false {
             SVProgressHUD.showInfo(withStatus: "最多只能选择\(config.maxSelectCount)张")
             return
         }
-        
         
         if isAvailableFormat(model){
             SVProgressHUD.showInfo(withStatus: "不支持的格式")
             return
         }
-        
         
         if dataSource.contains(model) {
             if model.isSelected  == true {
@@ -115,12 +112,10 @@ class PhotoManager: NSObject {
                 
                 DispatchQueue.global().async {
                     if let asset = model.asset {
-//                        print("model.locallyAvailable     ====\(model.locallyAvailable)")
                         if model.locallyAvailable == false {
                             self.isIcloudLoading = true
                         }
                         if model.mediaType == .image {
-                        
                             let option = PHImageRequestOptions()
                             option.isNetworkAccessAllowed = true
                             PHImageManager.default().requestImageData(for: asset, options: option) { imageData, string, orientation, infoDic in

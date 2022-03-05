@@ -11,61 +11,27 @@ import Photos
 import SnapKit
 import PictureSelector
 
+
 class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        test()
-        
+        configUI()
     }
     
     
     
-    func test() {
-        let library = PHPhotoLibrary.authorizationStatus()
-        if library == PHAuthorizationStatus.denied ||
-            library == PHAuthorizationStatus.restricted ||
-            library == PHAuthorizationStatus.notDetermined
-        {
-            print("没有权限")
-        } else {
-            print("有权限")
-        }
-        
-        if #available(iOS 14, *) {
-            // 查询权限
-            let level = PHAccessLevel.readWrite
-            
-            let status = PHPhotoLibrary.authorizationStatus(for: level)
-            switch status {
-            case .limited:
-                NSLog("limited")
-            case .denied:
-                NSLog("denied")
-            case .authorized:
-                NSLog("authorized")
-            default:
-                break
-            }
-        }
-        
-        let photoView = PhotoPickerView.init(.zero, itemSize: CGSize.init(width: 80, height: 80))
+    func configUI() {
+        let photoView  = PhotoPickerView()
         view.addSubview(photoView)
         photoView.snp.makeConstraints { make in
             make.leading.equalToSuperview()
-            make.height.equalTo(280)
-            make.top.equalTo(100)
+            make.height.equalTo(400)
+            make.top.equalTo(80)
             make.trailing.equalToSuperview()
         }
     }
-    
-    // 判断是否授权
-    func isAuthorized() -> Bool {
-        return PHPhotoLibrary.authorizationStatus() == .authorized ||
-        PHPhotoLibrary.authorizationStatus() == .notDetermined
-    }
-    
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
